@@ -1,0 +1,27 @@
+name: security-aspects
+
+run-name: ${{ github.actor }} is learning GitHub Actions
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+    oidctest:
+      runs-on: ubuntu-latest
+      steps:
+
+        - name: Configure AWS Credentials for China region audience
+          uses: aws-actions/configure-aws-credentials@v6.2.3
+          with:
+            audience: sts.amazonaws.com.cn
+            aws-region: cn-northwest-1
+            role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        - name: check aws access     
+          run: | 
+            aws sts get-caller-identity
